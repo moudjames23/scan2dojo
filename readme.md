@@ -10,6 +10,14 @@
 - **Creating engagement**: Create new engagement associated with products.
 - **Scan Import**: Import scan results into DefectDojo with advanced configuration options.
 
+### Demo
+You can use the online demo of [DefectDojo](https://hub.docker.com/r/defectdojo/defectdojo-django) which is available [here](https://demo.defectdojo.org/)
+
+> User: **admin**
+> Password: **1Defectdojo@demo#appsec**
+
+You can retrieve your Api Key [here](https://demo.defectdojo.org/api/key-v2) after authenticating
+
 ## Installation
 
 ### Via Docker
@@ -22,9 +30,19 @@ You can use docker to install scan2dojo:
 ### MacOs or Linux
 
 
-     curl  -L  https://github.com/moudjames23/scan2dojo/releases/download/v1.0.0/install.sh  |  bash  
+     curl  -L  https://github.com/moudjames23/scan2dojo/releases/download/v1.0.0/install.sh  |  bash 
+
+
 
 ### Windows
+
+Download the executable for windows [here](https://github.com/moudjames23/scan2dojo/releases/download/v1.0.0/install.bat)
+
+Run  the script by typing the file name:
+
+    install.bat
+
+
 
 ## Usage
 
