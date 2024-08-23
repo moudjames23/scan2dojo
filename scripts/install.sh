@@ -23,6 +23,6 @@ curl -L "$DOWNLOAD_URL" -o "$CLI_NAME"
 chmod +x "$CLI_NAME"
 
 # Move the binary to /usr/local/bin (or another directory in PATH)
-sudo mv "$CLI_NAME" /usr/local/bin/
+mv "$CLI_NAME" /usr/local/bin/
 
 echo "$CLI_NAME installed successfully!"
