@@ -3,10 +3,12 @@ package io.github.moudjames23.scan2dojo.http;
 import io.github.moudjames23.scan2dojo.dto.requests.EngagementRequest;
 import io.github.moudjames23.scan2dojo.dto.requests.ImportRequest;
 import io.github.moudjames23.scan2dojo.dto.requests.ProductRequest;
+import io.github.moudjames23.scan2dojo.dto.requests.ProductTypeRequest;
 import io.github.moudjames23.scan2dojo.dto.responses.EngagementResponse;
 import io.github.moudjames23.scan2dojo.dto.responses.ImportResponse;
 import io.github.moudjames23.scan2dojo.dto.responses.ProductResponse;
 import io.github.moudjames23.scan2dojo.dto.Configuration;
+import io.github.moudjames23.scan2dojo.dto.responses.ProductTypeResponse;
 import io.github.moudjames23.scan2dojo.enums.ScanType;
 import io.github.moudjames23.scan2dojo.enums.Severity;
 import io.github.moudjames23.scan2dojo.util.EnumUtil;
@@ -18,6 +20,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 
 import static io.github.moudjames23.scan2dojo.util.MessageUtil.*;
+import static io.github.moudjames23.scan2dojo.util.RequestUtil.*;
 
 @Service
 public class Scan2Dojo {
@@ -44,12 +47,20 @@ public class Scan2Dojo {
 
     }
 
+    public void createProductType(ProductTypeRequest productTypeRequest) throws IOException {
+
+        configuration.load();
+
+        ProductType product = new ProductType(configuration, productTypeRequest);
+        executeRequest(product, ProductTypeResponse.class);
+    }
+
     public void createProduct(ProductRequest productRequest) throws IOException {
 
         configuration.load();
 
         Product product = new Product(configuration, productRequest);
-        RequestUtil.executeRequest(product, ProductResponse.class);
+        executeRequest(product, ProductResponse.class);
     }
 
     public void createEngagement(EngagementRequest engagementRequest) throws IOException {
@@ -57,7 +68,7 @@ public class Scan2Dojo {
         configuration.load();
 
         Engagement engagement = new Engagement(configuration, engagementRequest);
-        RequestUtil.executeRequest(engagement, EngagementResponse.class);
+        executeRequest(engagement, EngagementResponse.class);
     }
 
     public void importScan(ImportRequest importRequest) throws IOException {
@@ -74,7 +85,7 @@ public class Scan2Dojo {
         }
 
         Import importer = new Import(configuration, importRequest);
-        RequestUtil.executeRequest(importer, ImportResponse.class);
+        executeRequest(importer, ImportResponse.class);
     }
 
 
