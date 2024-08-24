@@ -3,6 +3,7 @@ package io.github.moudjames23.scan2dojo.command;
 import io.github.moudjames23.scan2dojo.dto.requests.EngagementRequest;
 import io.github.moudjames23.scan2dojo.dto.requests.ImportRequest;
 import io.github.moudjames23.scan2dojo.dto.requests.ProductRequest;
+import io.github.moudjames23.scan2dojo.dto.requests.ProductTypeRequest;
 import io.github.moudjames23.scan2dojo.http.Scan2Dojo;
 import io.github.moudjames23.scan2dojo.util.DateUtil;
 import org.springframework.beans.factory.annotation.Value;
@@ -49,18 +50,21 @@ public class S2DCommand {
                 "  $ scan2dojo version\n\n" +
                 "  # Configure endpoint and API key\n" +
                 "  $ scan2dojo configure --endpoint https://api.example.com --apiKey your-api-key\n\n" +
+                "  # Create a new product type in DefectDojo\n" +
+                "  $ scan2dojo create:product-type --name 'Type Name' --description 'Type description' --critical true --key true\n\n" +
                 "  # Create a new product in DefectDojo\n" +
                 "  $ scan2dojo create:product --name 'My Product' --description 'Product description' --typeId 1 --slaConfiguration 1\n\n" +
                 "  # Import a scan result to DefectDojo\n" +
                 "  $ scan2dojo import --scanType 'Trivy Scan' --file /path/to/scan_result.json --productName 'My Product' --engagementName 'Release Engagement' --minimumSeverity High\n\n" +
                 "Scanning Commands:\n" +
-                "  configure        Configure endpoint and API key\n" +
-                "  create:product   Create new product\n" +
-                "  create:engagement Create new engagement\n" +
-                "  import           Import scan result to DefectDojo\n\n" +
+                "  configure          Configure endpoint and API key\n" +
+                "  create:product     Create new product\n" +
+                "  create:product-type Create new product type\n" +
+                "  create:engagement  Create new engagement\n" +
+                "  import             Import scan result to DefectDojo\n\n" +
                 "Utility Commands:\n" +
-                "  version          Show the current version of scan2dojo\n" +
-                "  help             Display this custom help message\n\n";
+                "  version            Show the current version of scan2dojo\n" +
+                "  help               Display this custom help message\n\n";
     }
 
 
@@ -87,6 +91,35 @@ public class S2DCommand {
 
     }
 
+    /**
+     * Shell command to create a new product type.
+     *
+     * @ShellMethod(key = "create:product-type", value = "Create a new product type")
+     * This command allows the user to create a new product type by providing a name,
+     * description, and two boolean flags to specify if the product type is critical
+     * and/or considered a key type.
+     *
+     * @param name The name of the product type. This is a required parameter provided by the user.
+     * @param description A brief description of the product type. This is a required parameter provided by the user.
+     * @param critical Flag indicating whether the product type is considered critical. This is an optional parameter
+     *                 with a default value of "true".
+     * @param key Flag indicating whether the product type is considered a key type or primary feature. This is an optional
+     *            parameter with a default value of "true".
+     * @throws IOException This method may throw an IOException if there is an input/output issue
+     *                     during the creation of the product type.
+     */
+    @ShellMethod(key = "create:product-type", value = "create new product type")
+    public void createProductType(
+            @ShellOption(help = "The name of the product type") String name,
+            @ShellOption(help = "A brief description of the product type.") String description,
+            @ShellOption(help = "The ID representing the type of the product.", defaultValue = "true") boolean critical,
+            @ShellOption(help = "The ID representing the type of the product.", defaultValue = "true") boolean key
+    ) throws IOException {
+        ProductTypeRequest productTypeRequest = new ProductTypeRequest(name, description, critical, key);
+
+        this.scan2Dojo.createProductType(productTypeRequest);
+    }
+
 
     /**
      * Shell command to create a new product in the defectdojo.
@@ -108,11 +141,9 @@ public class S2DCommand {
             @ShellOption(help = "The name of the product.") String name,
             @ShellOption(help = "A brief description of the product.") String description,
             @ShellOption(help = "The ID representing the type of the product.") int typeId,
-            @ShellOption(help = "The Service Level Agreement (SLA) configuration ID for the product. Defaults to 1 if set to 0.") int slaConfiguration
+            @ShellOption(help = "The Service Level Agreement (SLA) configuration ID for the product. Defaults to 1 if set to 0.", defaultValue = "1") int slaConfiguration
     ) throws IOException {
 
-
-        if (slaConfiguration == 0) slaConfiguration = 1;
 
         ProductRequest productRequest = new ProductRequest(name, description, typeId, slaConfiguration);
 

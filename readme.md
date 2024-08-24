@@ -6,7 +6,8 @@
 ## Features
 
 - **Configuration**: Configure the endpoint and API key for integration with DefectDojo.
-- **Product Creation**: Create new products in DefectDojo.
+- **Product type Creation**: Create new products type in DefectDojo.
+-  **Product Creation**: Create new products in DefectDojo.
 - **Creating engagement**: Create new engagement associated with products.
 - **Scan Import**: Import scan results into DefectDojo with advanced configuration options.
 
@@ -33,17 +34,6 @@ You can use docker to install scan2dojo:
      curl  -L  https://github.com/moudjames23/scan2dojo/releases/download/v1.0.0/install.sh  |  bash 
 
 
-
-### Windows
-
-Download the executable for windows [here](https://github.com/moudjames23/scan2dojo/releases/download/v1.0.0/install.bat)
-
-Run  the script by typing the file name:
-
-    install.bat
-
-
-
 ## Usage
 
 ### Show version
@@ -62,54 +52,74 @@ To display the custom help message, use:
 
 ### Configure endpoint and API key
 
-Before using `scan2dojo`, you need to configure it to connect to your DefectDojo instance:
+This command sets the endpoint and API key that will be used by the application to communicate with the Scan2Dojo service
 
 
      scan2dojo configure --endpoint https://api.example.com --apiKey your-api-key
+
+- --***endpoint***: The url of the defectdojo service endpoint
+-  --***apiKey***: The api key used to authenticate requests to the endpoint
 
 In interactive mode, you can just type:
 
     scan2dojo configure
 
-Then enter the endpoint and apiKey
 
-### Create a product
+### Create a new product  type
+his command allows the user to create a new product type by providing a name,  description, and two boolean flags to specify if the product type is critical and/or considered a key type.
 
-To create a new product in DefectDojo:
+    scan2dojo create:product-type --name Business --description "Product type description" --critical true --key false
+
+- --***name***: The name of the product type. This is a required parameter provided by the user
+
+- --***description***: A brief description of the product type. This is a required parameter provided by the user
+
+- --***critical:*** Flag indicating whether the product type is considered critical. This is an optional parameter  with a default value of true
+-  --***key***: Flag indicating whether the product type is considered a key type or primary feature. This is an optional parameter with a default value of "true
+
+### Create a new product
+
+This command allows you to create a new product by providing the necessary details  such as the product name, description, type ID, and SLA configuration. If the SLA  configuration is set to 0, it will be defaulted to 1.
 
 
      scan2dojo create:product --name "Product Name" --description "Product Description" --typeId 1 --slaConfiguration 1  
 
 
 
-- [ ] You will have to reassure yourself of the existence of the
-  product type before and the **slaConfiguration** is optional
+- --***name***: The name of the product. This is a required field.
+- --***description***: A brief description of the product. This is a required field.
+- --***typeId***: The ID representing the type of the product. This is a required field.
+- --***slaConfiguration***: The Service Level Agreement (SLA) configuration ID for the product. The default value is 1
 
 ### Create an engagement
 
-To create a new engagement in DefectDojo:
+This command allows the user to create a new engagement by providing necessary details such as the engagement name, description, start and end dates, and the associated product ID. If the start and end dates are not provided, they default to today's date and one year from today, respectively.
 
 
 
     scan2dojo create:engagement --name "Engagement name" --description "Engagement description" --start "2024-01-01" --end "2024-12-31" --productId 2
 
-- [ ] ***start*** is  optional and by default it will take the current date
-- [ ] ***end*** is optional and by default it will take the date in one year
-- [ ] ***productId*** is the id of the product to which we want to link this engagement
+- --***name*** The name of the engagement. This is a required field.
+- --***description*** A brief description of the engagement. This is a required field.
+- --***start*** The start date of the engagement in the format yyyy-MM-dd. Defaults to today's date if not provided.
+- --***end*** The end date of the engagement in the format yyyy-MM-dd. Defaults to one year from today's date if not provided.
+- --***productId*** The ID of the product associated with this engagement. This is a required field.
+
+
 
 ### Import a scan result
 
-To import a scan result into DefectDojo:
+This command allows the user to import a scan result into DefectDojo by specifying details such as the scan type, the file containing the scan results, the name of the product, the name of the engagement, and the minimum severity level of vulnerabilities to be included.
 
 
      scan2dojo import --scanType "Trivy Scan" --file /path/to/scan_result.json --productName "Product Name" --engagementName "Engagement Name" --minimumSeverity High  
 
-- [ ] ***--scanType*** allows you to define the type of scan supported by defectdojo. You can find the list
-  [here](https://documentation.defectdojo.com/integrations/parsers/file/)
-- [ ] ***--file*** the absolute path of the scan result
-- [ ] ***--productName***  product's name
-- [ ] ***--engagementName***  engagement's name
-- [ ] ***--minimumSeverity*** List of possible values: **Info**, **Low**, **Medium**, **High**, **Critical**
+- --***scanType*** The type of the scan. This should correspond to the scanner used.
+- --***file*** The path to the scan result file to be imported.
+- ***--productName*** The name of the product in DefectDojo to which the scan result belongs.
+- ***--engagementName*** The name of the engagement in DefectDojo under which the scan result will be recorded.
+- ***--minimumSeverity*** The minimum severity of findings to be imported. Possible values are **Info**, **Low**, **Medium**, **High**
+  and **Critical**
 
 ## CI/CD integration
 
