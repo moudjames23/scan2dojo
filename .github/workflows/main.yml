@@ -34,7 +34,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest]
+        os: [ubuntu-latest]
     steps:
       - uses: actions/checkout@v3
       - uses: graalvm/setup-graalvm@v1
@@ -50,7 +50,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: scan2dojo-${{ matrix.os }}
-          path: ${{ matrix.os == 'windows-latest' && 'target/scan2dojo.exe' || 'target/scan2dojo' }}
+          path: target/scan2dojo
 
   build-and-push-docker-image:
     if: github.event_name == 'push'
