@@ -1,5 +1,6 @@
 package io.github.moudjames23.scan2dojo.http;
 
+import io.github.moudjames23.scan2dojo.dto.Configuration;
 import io.github.moudjames23.scan2dojo.dto.requests.EngagementRequest;
 import io.github.moudjames23.scan2dojo.dto.requests.ImportRequest;
 import io.github.moudjames23.scan2dojo.dto.requests.ProductRequest;
@@ -7,25 +8,23 @@ import io.github.moudjames23.scan2dojo.dto.requests.ProductTypeRequest;
 import io.github.moudjames23.scan2dojo.dto.responses.EngagementResponse;
 import io.github.moudjames23.scan2dojo.dto.responses.ImportResponse;
 import io.github.moudjames23.scan2dojo.dto.responses.ProductResponse;
-import io.github.moudjames23.scan2dojo.dto.Configuration;
 import io.github.moudjames23.scan2dojo.dto.responses.ProductTypeResponse;
 import io.github.moudjames23.scan2dojo.enums.ScanType;
 import io.github.moudjames23.scan2dojo.enums.Severity;
 import io.github.moudjames23.scan2dojo.util.EnumUtil;
-import io.github.moudjames23.scan2dojo.util.RequestUtil;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
 
 import static io.github.moudjames23.scan2dojo.util.MessageUtil.*;
-import static io.github.moudjames23.scan2dojo.util.RequestUtil.*;
+import static io.github.moudjames23.scan2dojo.util.RequestUtil.executeRequest;
 
 @Service
 public class Scan2Dojo {
 
     private Configuration configuration;
+
 
     public Scan2Dojo() {
 
@@ -36,15 +35,12 @@ public class Scan2Dojo {
         printlnWithBorder(RED, "Version");
     }
 
-    public void configure(String endpoint, String apiKey) throws IOException, URISyntaxException {
+    public void configure(String endpoint, String apiKey) throws IOException {
 
         configuration.setEndpoint(endpoint);
         configuration.setApiKey(apiKey);
 
         configuration.save();
-
-        printlnWithBorder(GREEN, "Configuration updated successfully 🎉🎉🎉");
-
     }
 
     public void createProductType(ProductTypeRequest productTypeRequest) throws IOException {
