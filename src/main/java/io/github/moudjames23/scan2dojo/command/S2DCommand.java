@@ -12,7 +12,6 @@ import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 
 
 @ShellComponent
@@ -20,8 +19,10 @@ public class S2DCommand {
 
     private final Scan2Dojo scan2Dojo;
 
+
     @Value("${APP_VERSION}")
     private String version;
+
 
 
     public S2DCommand(Scan2Dojo importService) {
@@ -85,7 +86,7 @@ public class S2DCommand {
     public void configure(
             @ShellOption(defaultValue = "", help = "The URL of the Scan2Dojo service endpoint.") String endpoint,
             @ShellOption(defaultValue = "", help = "The API key used to authenticate requests to the endpoint.") String apiKey
-    ) throws IOException, URISyntaxException {
+    ) throws IOException {
 
         this.scan2Dojo.configure(endpoint, apiKey);
 

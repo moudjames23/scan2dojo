@@ -23,10 +23,23 @@ You can retrieve your Api Key [here](https://demo.defectdojo.org/api/key-v2) aft
 
 ### Via Docker
 
-You can use docker to install scan2dojo:
+You can use Docker to run `scan2dojo` in interactive mode (`-it`) and automatically remove the container after use with the `--rm` option.
 
 
-     docker pull moudjames23/scan2dojo:v1.0.0
+     docker run --rm -it moudjames23/scan2dojo:1.0.0
+
+
+
+You can also mount a volume to specify the location of your scan results when running the Docker image. For example, if your scan results are located at `/Users/Moud/Libs/trivy.json`, you can mount it like this:
+
+    docker run --rm -it -v /Users/Moud/Libs:/data moudjames23/scan2dojo:1.0.0
+
+You can directly execute a commande like this:
+
+    docker run -v /Users/Moud/Libs:/dat moudjames23/scan2dojo:1.0.0 import --scanType "Trivy Scan" --file /data/trivy.json --productName "Scan2dojo" --engagementName "Release" --minimumSeverity High
+
+> Before running this command, make sure that the product "Scan2dojo" exists and that the "Release" engagement also exists.
+
 
 ### MacOs or Linux
 
@@ -59,10 +72,6 @@ This command sets the endpoint and API key that will be used by the application 
 
 - --***endpoint***: The url of the defectdojo service endpoint
 -  --***apiKey***: The api key used to authenticate requests to the endpoint
-
-In interactive mode, you can just type:
-
-    scan2dojo configure
 
 
 ### Create a new product  type

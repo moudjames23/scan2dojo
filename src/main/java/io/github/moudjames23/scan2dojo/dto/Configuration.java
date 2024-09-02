@@ -87,6 +87,8 @@ public class Configuration {
 
         objectMapper.writeValue(configPath.toFile(), data);
 
+        printlnWithBorder(GREEN, "Configuration updated successfully 🎉🎉🎉");
+
     }
 
 }
